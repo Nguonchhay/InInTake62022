@@ -1,6 +1,5 @@
 package injavaintake6;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,8 +15,12 @@ public class Main {
 //        week2Task3();
 //        week2Task4();
 //        week2Task5();
-        week2Task6();
+//        week2Task6();
 
+//        Week3Demo.task1();
+//        Week3Demo.task2();
+//        Week3Demo.task3();
+        Week3Demo.task4();
     }
 
     public static void week2Task1() {
