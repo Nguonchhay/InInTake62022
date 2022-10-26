@@ -1,5 +1,8 @@
 package injavaintake6;
 
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Week3Demo {
 
     public static void printAllArray(int[] array) {
@@ -87,5 +90,72 @@ public class Week3Demo {
         printAllArray(arrNumber);
         System.out.println("\n After remove: " + removeValue);
         printAllArray(newArrNumber);
+    }
+
+    public static void task5() {
+        int[] arrNumber = {4, 3};
+        Arrays.sort(arrNumber);
+        printAllArray(arrNumber);
+
+        int count = arrNumber.length;
+        if (count > 1) {
+            int firstMax = arrNumber[count - 1];
+            int secondMax = arrNumber[count - 2];
+
+            if (secondMax == firstMax) {
+                for (int i = count - 3; i >= 0; i--) {
+                    if (secondMax > arrNumber[i]) {
+                        secondMax = arrNumber[i];
+                        break;
+                    }
+                }
+            }
+
+            if (secondMax == firstMax) {
+                System.out.println("\nNo second max");
+            } else {
+                System.out.println("\nSecond max = " + secondMax);
+            }
+        } else {
+            System.out.println("\nNo second max");
+        }
+    }
+
+    public static void task6() {
+        Scanner scanner = new Scanner(System.in);
+        String[] productNames = new String[50];
+        int[] quantities = new int[50];
+        double[] prices = new double[50];
+
+        int index = 0;
+        char answer = ' ';
+        do {
+            System.out.print("\nProduct name: ");
+            productNames[index] = scanner.nextLine();
+
+            System.out.print("Quantity: ");
+            quantities[index] = scanner.nextInt();
+
+            System.out.print("Unit Price: ");
+            prices[index] = scanner.nextDouble();
+
+            scanner.nextLine();
+            System.out.print("\n==> Continue (press y|Y)? ");
+            answer = scanner.nextLine().charAt(0);
+            index++;
+        } while(answer == 'y' || answer == 'Y');
+
+        System.out.println("\n========================================");
+        System.out.println("Product Name Quantity Unit Price Total");
+
+        double total = 0.0;
+        for (int i = 0; i < index; i++) {
+            double subTotal = quantities[i] * prices[i];
+            System.out.println(productNames[i] + "        " + quantities[i] + "     " + prices[i] + "   " + subTotal);
+            total += subTotal;
+        }
+
+        System.out.println("\n========================================");
+        System.out.println("                             Total = " + total);
     }
 }

@@ -20,7 +20,9 @@ public class Main {
 //        Week3Demo.task1();
 //        Week3Demo.task2();
 //        Week3Demo.task3();
-        Week3Demo.task4();
+//        Week3Demo.task4();
+//        Week3Demo.task5();
+        Week3Demo.task6();
     }
 
     public static void week2Task1() {
