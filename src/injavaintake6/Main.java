@@ -22,7 +22,9 @@ public class Main {
 //        Week3Demo.task3();
 //        Week3Demo.task4();
 //        Week3Demo.task5();
-        Week3Demo.task6();
+//        Week3Demo.task6();
+
+        Week4Demo.launch();
     }
 
     public static void week2Task1() {
