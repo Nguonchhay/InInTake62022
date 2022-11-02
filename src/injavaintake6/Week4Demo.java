@@ -9,7 +9,9 @@ public class Week4Demo {
 //        task3();
 //        task4();
 //        task5();
-        task5_1();
+//        task5_1();
+//        task6();
+        week3Task6();
     }
 
     public static void displayIntList(ArrayList<Integer> arr) {
@@ -158,5 +160,79 @@ public class Week4Demo {
         } else {
             System.out.println("Collection 1 < Collection 2");
         }
+    }
+
+    public static void task6() {
+        /**
+         * Solution:
+         * 1. Initialize numeric array with int data type
+         * 2. Declare hash map
+         * 3. Loop numeric array then assign value to hash map
+         * 4. Display all values from hash map
+         */
+        int[] numericArray = {2, 3, 5, 10};
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < numericArray.length; i++) {
+            map.put(numericArray[i], numericArray[i]);
+        }
+
+        map.forEach((key, value) -> {
+            System.out.println("key = " + key + ", value = " + value);
+        });
+        map.get(4);
+    }
+
+    public static void week3Task6() {
+        Scanner scanner = new Scanner(System.in);
+//        String[] productNames = new String[50];
+//        int[] quantities = new int[50];
+//        double[] prices = new double[50];
+//        Map<String, String> product = new HashMap<>();
+//        product.put("name", "Milk");
+//        product.put("quantity", "2");
+//        product.put("price", "2.5");
+
+        List<Map<String, String>> carts = new ArrayList<>();
+
+        int index = 0;
+        char answer = ' ';
+        do {
+            Map<String, String> product = new HashMap<>();
+
+            System.out.print("\nProduct name: ");
+            String name = scanner.nextLine();
+            product.put("name", name);
+
+            System.out.print("Quantity: ");
+            int quantity = scanner.nextInt();
+            product.put("quantity", quantity + "");
+
+            System.out.print("Unit Price: ");
+            double price = scanner.nextDouble();
+            product.put("price", price + "");
+
+            scanner.nextLine();
+            System.out.print("\n==> Continue (press y|Y)? ");
+            answer = scanner.nextLine().charAt(0);
+
+            carts.add(product);
+            index++;
+        } while(answer == 'y' || answer == 'Y');
+
+        System.out.println("\n========================================");
+        System.out.println("Product Name Quantity Unit Price Total");
+
+        double total = 0.0;
+        for (int i = 0; i < carts.size(); i++) {
+            Map<String, String> product = carts.get(i);
+            int quantity = Integer.parseInt(product.get("quantity"));
+            double price = Double.parseDouble(product.get("price"));
+            double subTotal = quantity * price;
+            System.out.println(product.get("name") + "        " + quantity + "     " + price + "   " + subTotal);
+            total += subTotal;
+        }
+
+        System.out.println("\n========================================");
+        System.out.println("                             Total = " + total);
     }
 }
