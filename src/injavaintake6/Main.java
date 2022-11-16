@@ -1,5 +1,7 @@
 package injavaintake6;
 
+import injavaintake6.week6.Week6Demo;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +26,8 @@ public class Main {
 //        Week3Demo.task5();
 //        Week3Demo.task6();
 
-        Week4Demo.launch();
+//        Week4Demo.launch();
+        Week6Demo.launch();
     }
 
     public static void week2Task1() {
