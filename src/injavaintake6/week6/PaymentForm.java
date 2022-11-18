@@ -11,6 +11,7 @@ public class PaymentForm {
         transactions.add(new Wing(10.0));
         transactions.add(new Acleda(7.5));
         transactions.add(new Aba(3.5));
+        transactions.add(new Prince(4.0));
         transactions.add(new Aba(15.5));
         transactions.add(new Wing(8.5));
     }
@@ -24,6 +25,8 @@ public class PaymentForm {
                 ((Wing) transaction).transfer();
             } else if (transaction instanceof Acleda) {
                 ((Acleda) transaction).pay();
+            } else if (transaction instanceof Prince) {
+                ((Prince) transaction).doPay();
             }
         });
     }
@@ -50,6 +53,8 @@ public class PaymentForm {
                     amountI = ((Wing) transactionI).getFee();
                 } else if (transactionI instanceof Acleda) {
                     amountI = ((Acleda) transactionI).getAmount();
+                } else if (transactionI instanceof Prince) {
+                    amountI = ((Prince) transactionI).getAmount();
                 }
 
                 Object transactionK = transactions.get(k);
@@ -60,6 +65,8 @@ public class PaymentForm {
                     amountK = ((Wing) transactionK).getFee();
                 } else if (transactionK instanceof Acleda) {
                     amountK = ((Acleda) transactionK).getAmount();
+                } else if (transactionK instanceof Prince) {
+                    amountK = ((Prince) transactionK).getAmount();
                 }
 
                 if (amountI < amountK) {

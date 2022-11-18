@@ -1,6 +1,6 @@
 package injavaintake6;
 
-import injavaintake6.week6.Week6Demo;
+import injavaintake6.week6_1.Week6Demo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
