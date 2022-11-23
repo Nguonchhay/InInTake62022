@@ -1,6 +1,7 @@
 package injavaintake6;
 
 import injavaintake6.week6_1.Week6Demo;
+import injavaintake6.week8.ShapeDemo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,7 +28,8 @@ public class Main {
 //        Week3Demo.task6();
 
 //        Week4Demo.launch();
-        Week6Demo.launch();
+//        Week6Demo.launch();
+        ShapeDemo.launch();
     }
 
     public static void week2Task1() {
