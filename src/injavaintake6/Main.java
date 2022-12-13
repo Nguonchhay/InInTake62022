@@ -1,5 +1,6 @@
 package injavaintake6;
 
+import injavaintake6.todos.ToDoApp;
 import injavaintake6.week6_1.Week6Demo;
 import injavaintake6.week8.ShapeDemo;
 
@@ -29,7 +30,9 @@ public class Main {
 
 //        Week4Demo.launch();
 //        Week6Demo.launch();
-        ShapeDemo.launch();
+//        ShapeDemo.launch();
+
+        ToDoApp.launch();
     }
 
     public static void week2Task1() {
