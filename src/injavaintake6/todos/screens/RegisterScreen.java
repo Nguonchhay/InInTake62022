@@ -1,6 +1,7 @@
 package injavaintake6.todos.screens;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -8,7 +9,9 @@ import java.awt.event.MouseEvent;
 public class RegisterScreen extends JFrame {
 
     protected JTextField txtEmail, txtFullName;
-    protected JPasswordField txtPassword;
+    protected JPasswordField txtPassword, txtConfirmPassword;
+    protected String profile;
+    protected JLabel lblImage;
 
     public RegisterScreen() {
         super("Register");
@@ -50,14 +53,38 @@ public class RegisterScreen extends JFrame {
         txtPassword.setBounds(50, 180, 300, 30);
         add(txtPassword);
 
+        JLabel lblConfirmPassword = new JLabel("Confirm Password *");
+        lblConfirmPassword.setBounds(50, 220, 300, 30);
+        add(lblConfirmPassword);
+        txtConfirmPassword = new JPasswordField();
+        txtConfirmPassword.setBounds(50, 260, 300, 30);
+        add(txtConfirmPassword);
 
-        JLabel lblForgotPassword = new JLabel("Forgot Password?");
-        lblForgotPassword.setBounds(50, 220, 300, 30);
-        add(lblForgotPassword);
+
+        JLabel lblProfile = new JLabel("Profile");
+        lblProfile.setBounds(50, 300, 300, 30);
+        add(lblProfile);
+
+        lblImage = new JLabel();
+        lblImage.setBounds(50, 340, 100, 100);
+        add(lblImage);
+        JButton browserProfile = new JButton("Choose file");
+        browserProfile.setBounds(100, 300, 100, 30);
+        browserProfile.addActionListener(e -> {
+            JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.setFileFilter(new FileNameExtensionFilter("Image file", "jpg", "png", "jpeg"));
+            if (jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String imagePath = jFileChooser.getSelectedFile().getAbsolutePath();
+                Image selectedImage = new ImageIcon(imagePath).getImage();
+                selectedImage = selectedImage.getScaledInstance(100, 100, 0);
+                lblImage.setIcon(new ImageIcon(selectedImage));
+            }
+        });
+        add(browserProfile);
 
 
         JButton btnSignUp = new JButton("Sign Up");
-        btnSignUp.setBounds(130, 260, 100, 35);
+        btnSignUp.setBounds(130, 460, 100, 35);
         add(btnSignUp);
         btnSignUp.addActionListener(event -> {
             register();
@@ -65,7 +92,7 @@ public class RegisterScreen extends JFrame {
 
 
         JLabel lblSignUp = new JLabel("Already has an account?");
-        lblSignUp.setBounds(120, 310, 200, 50);
+        lblSignUp.setBounds(120, 490, 200, 50);
         add(lblSignUp);
         lblSignUp.addMouseListener(new MouseAdapter() {
             @Override
@@ -96,6 +123,13 @@ public class RegisterScreen extends JFrame {
                     "Success login",
                     JOptionPane.INFORMATION_MESSAGE
             );
+            /**
+             * 1. Store data to table
+             * 1.1. Encrypt password before storing
+             * 2. If success then copy selected image to project folder "uploads"
+             * 3. Do auto login user
+             * 4. Redirect to Dashboard
+             */
         } else {
             JOptionPane.showMessageDialog(
                     this,
