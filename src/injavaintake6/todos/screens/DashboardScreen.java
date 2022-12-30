@@ -1,5 +1,7 @@
 package injavaintake6.todos.screens;
 
+import injavaintake6.todos.services.MySqlService;
+
 import javax.swing.*;
 
 public class DashboardScreen extends JFrame {
@@ -24,6 +26,9 @@ public class DashboardScreen extends JFrame {
          * 1. Search for user whether there is a logged in user
          * 1.1. check user field "is_auth" equal to "true" or 1
          */
+        MySqlService mySqlService = new MySqlService();
+        mySqlService.openConnection();
+
         if (isAuth) {
             setVisible(true);
         } else {
