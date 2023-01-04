@@ -1,9 +1,14 @@
 package injavaintake6.todos.screens;
 
+import injavaintake6.todos.services.MySqlService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class LoginScreen extends JFrame {
 
@@ -22,6 +27,7 @@ public class LoginScreen extends JFrame {
     }
 
     public void display() {
+        System.out.println("LoginScreen");
         setVisible(true);
     }
 
@@ -91,12 +97,36 @@ public class LoginScreen extends JFrame {
         String emailValue = txtEmail.getText().toLowerCase();
         String passwordValue = String.valueOf(txtPassword.getPassword());
         if (isValidate(emailValue, passwordValue)) {
-            JOptionPane.showMessageDialog(
-            this,
-                    "Redirect user to Dashboard screen",
-                    "Success login",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            String queryUserSQL = "SELECT * FROM users WHERE email='" + emailValue + "' AND password='" + passwordValue + "' LIMIT 1;";
+            MySqlService mySqlService = new MySqlService();
+            mySqlService.openConnection();
+            Statement statement = mySqlService.getStatement();
+            try {
+                ResultSet resultSet = statement.executeQuery(queryUserSQL);
+                boolean isExisted = false;
+                while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+                    String updateAuthUserSQL = "UPDATE users SET is_auth=1 WHERE id=" + id;
+                    int result = statement.executeUpdate(updateAuthUserSQL);
+                    isExisted = true;
+                    break;
+                }
+                if (isExisted) {
+                    hidden();
+                    DashboardScreen dashboardScreen = new DashboardScreen();
+                    dashboardScreen.display();
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Invalid credentials!",
+                            "Failed Login",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            mySqlService.closeConnection();
         } else {
             JOptionPane.showMessageDialog(
                     this,
