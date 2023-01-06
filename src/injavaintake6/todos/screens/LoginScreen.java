@@ -1,11 +1,13 @@
 package injavaintake6.todos.screens;
 
 import injavaintake6.todos.services.MySqlService;
+import injavaintake6.todos.services.MySqlServiceSingleton;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,7 +29,6 @@ public class LoginScreen extends JFrame {
     }
 
     public void display() {
-        System.out.println("LoginScreen");
         setVisible(true);
     }
 
@@ -98,10 +99,9 @@ public class LoginScreen extends JFrame {
         String passwordValue = String.valueOf(txtPassword.getPassword());
         if (isValidate(emailValue, passwordValue)) {
             String queryUserSQL = "SELECT * FROM users WHERE email='" + emailValue + "' AND password='" + passwordValue + "' LIMIT 1;";
-            MySqlService mySqlService = new MySqlService();
-            mySqlService.openConnection();
-            Statement statement = mySqlService.getStatement();
             try {
+                Connection connection = MySqlServiceSingleton.getInstance();
+                Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(queryUserSQL);
                 boolean isExisted = false;
                 while (resultSet.next()) {
@@ -126,7 +126,6 @@ public class LoginScreen extends JFrame {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            mySqlService.closeConnection();
         } else {
             JOptionPane.showMessageDialog(
                     this,

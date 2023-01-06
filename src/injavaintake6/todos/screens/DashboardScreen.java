@@ -1,15 +1,18 @@
 package injavaintake6.todos.screens;
 
+import injavaintake6.todos.screens.todos.ToDoListScreen;
 import injavaintake6.todos.services.MySqlService;
+import injavaintake6.todos.services.MySqlServiceSingleton;
 
 import javax.swing.*;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DashboardScreen extends JFrame {
 
-    private MySqlService mySqlService;
+//    private MySqlService mySqlService;
 
     public DashboardScreen() {
         super("Dashboard");
@@ -18,7 +21,7 @@ public class DashboardScreen extends JFrame {
         setLayout(null);
         setLocationRelativeTo(null);
 
-        mySqlService = new MySqlService();
+//        mySqlService = new MySqlService();
         initUI();
     }
 
@@ -27,19 +30,17 @@ public class DashboardScreen extends JFrame {
 //    }
 
     public void display() {
-        System.out.println("DashboardScreen");
         // Check if user already logged in
         boolean isAuth = false;
-        mySqlService.openConnection();
         String queryUserSQL = "SELECT id FROM users WHERE is_auth=1 LIMIT 1";
-        Statement statement = mySqlService.getStatement();
         try {
+            Connection connection = MySqlServiceSingleton.getInstance();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryUserSQL);
             while (resultSet.next()) {
                 isAuth = true;
                 break;
             }
-            mySqlService.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,6 +76,11 @@ public class DashboardScreen extends JFrame {
 
         JButton btnToDo = new JButton("ToDo List");
         pMenu.add(btnToDo);
+        btnToDo.addActionListener(e -> {
+            hidden();
+            ToDoListScreen toDoListScreen = new ToDoListScreen();
+            toDoListScreen.display();
+        });
 
         JButton btnUser = new JButton("User List");
         pMenu.add(btnUser);
@@ -87,17 +93,17 @@ public class DashboardScreen extends JFrame {
     }
 
     private void logout() {
-        mySqlService.openConnection();
-        Statement statement = mySqlService.getStatement();
         try {
+            Connection connection = MySqlServiceSingleton.getInstance();
+            Statement statement = connection.createStatement();
             String updateAuthUserSQL = "UPDATE users SET is_auth=0";
             int result = statement.executeUpdate(updateAuthUserSQL);
-            mySqlService.closeConnection();
 
             hidden();
             LoginScreen loginScreen = new LoginScreen();
             loginScreen.display();
         } catch (SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(
                     this,
                     "Something went wrong!",
