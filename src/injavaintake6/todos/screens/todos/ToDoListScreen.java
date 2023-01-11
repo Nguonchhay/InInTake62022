@@ -1,9 +1,8 @@
 package injavaintake6.todos.screens.todos;
 
+import injavaintake6.todos.models.Task;
 import injavaintake6.todos.screens.BaseScreen;
 import injavaintake6.todos.screens.DashboardScreen;
-import injavaintake6.todos.screens.RegisterScreen;
-import injavaintake6.todos.services.MySqlServiceSingleton;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -13,11 +12,9 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.EventObject;
+import java.util.List;
 
 public class ToDoListScreen extends BaseScreen {
 
@@ -27,7 +24,7 @@ public class ToDoListScreen extends BaseScreen {
     public ToDoListScreen() {
         super("ToDo List");
         setSize(800, 600);
-
+        setLocationRelativeTo(null);
 //        mySqlService = new MySqlService();
         initUI();
     }
@@ -52,6 +49,7 @@ public class ToDoListScreen extends BaseScreen {
         loadDataToTable();
         tableToDo = new JTable(tableModelToDo);
         tableToDo.setRowHeight(30);
+        tableToDo.setDefaultEditor(Object.class, null);
         tableToDo.getColumn("").setCellRenderer(new ToDoTableRenderAndEditor(this, tableToDo));
         tableToDo.getColumn("").setCellEditor(new ToDoTableRenderAndEditor(this, tableToDo));
 
@@ -63,36 +61,51 @@ public class ToDoListScreen extends BaseScreen {
     private void loadDataToTable() {
         String[] columnNames = {"ID", "Title", "Priority", "Status", ""};
         tableModelToDo = new DefaultTableModel(columnNames, 0);
-        try {
-            Connection connection = MySqlServiceSingleton.getInstance();
-            Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM tasks ORDER BY priority";
-            ResultSet result = statement.executeQuery(sql);
-            while (result.next()) {
-                tableModelToDo.addRow(new Object[] {
-                        result.getInt(1),
-                        result.getString(2),
-                        result.getInt(3),
-                        result.getInt(4)
-                });
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+//        Task task = new Task();
+//        List<Task> result = task.list();
+        Task.list().forEach(queryTask -> {
+            tableModelToDo.addRow(new Object[] {
+                queryTask.getId(),
+                queryTask.getTitle(),
+                queryTask.getPriority(),
+                queryTask.getStatus()
+            });
+        });
     }
 
     class ToDoTableRenderAndEditor  implements TableCellRenderer, TableCellEditor {
+        private DefaultTableModel tableModel;
         private JPanel pAction;
         private JButton btnEdit, btnDelete;
         private int selectedRow;
 
         public ToDoTableRenderAndEditor(JFrame screen, JTable table) {
+            tableModel = (DefaultTableModel) table.getModel();
             pAction = new JPanel(new FlowLayout());
             btnEdit = new JButton("Edit");
             btnDelete = new JButton("Delete");
             pAction.add(btnEdit);
             pAction.add(btnDelete);
+
+            btnEdit.addActionListener(e -> {
+                ToDoListScreen listScreen = (ToDoListScreen) screen;
+                listScreen.hidden();
+                CreateAndEditScreen createAndEditScreen = new CreateAndEditScreen(false);
+                createAndEditScreen.display();
+            });
+
+            btnDelete.addActionListener(e -> {
+                int id = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+                if (
+                        JOptionPane.showConfirmDialog(screen, "Are you sure?", "Task Deletion", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION
+                ) {
+                    if (Task.remove(id)) {
+                        tableModel.removeRow(selectedRow);
+                    } else {
+                        JOptionPane.showMessageDialog(screen, "Something went wrong!");
+                    }
+                }
+            });
         }
 
         @Override
@@ -118,7 +131,7 @@ public class ToDoListScreen extends BaseScreen {
 
         @Override
         public boolean stopCellEditing() {
-            return false;
+            return true;
         }
 
         @Override
